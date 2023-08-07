@@ -9,7 +9,7 @@ repository = "https://github.com/baumbus/temp-conv"
 license = "MIT"
 keywords = ["cli", "units", "converter"]
 categories = ["command-line-utilities"]
-exclude = ["tests/"]
+exclude = ["tests/", ".github/", "target/"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
