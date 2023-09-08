@@ -4,7 +4,7 @@ temp-conv is a cli-tool to convert between diffirent units for temperatures.
 
 ## Installation
 
-First, install [Rust](https://www.rust-lang.org/tools/install) (using the recommended `cargo`) and then
+First, install [Rust](https://www.rust-lang.org/tools/install) (using the recommended `rustup` method) and then
 
 ```bash
 cargo install temp-conv
