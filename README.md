@@ -18,7 +18,7 @@ To update, run the same command again.
 
 The binary is named `temp-conv`
 
-Running it with no arguments or as `temp-conv --help` will bring up a help listing.
+Running it with no arguments or `temp-conv --help` will bring up a help page.
 
 ## License
 
