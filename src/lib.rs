@@ -1,15 +1,17 @@
+use std::process::exit;
+
 use clap::{Parser, Subcommand};
 
-#[derive(Parser)]
+#[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Cli {
-    value: f64,
+    value: Option<f64>,
 
     #[command(subcommand)]
     command: Commands,
 }
 
-#[derive(Subcommand)]
+#[derive(Subcommand, Debug)]
 enum Commands {
     /// Celsius to Fahrenheit
     Ctf,
@@ -40,8 +42,12 @@ impl Commands {
 
 pub fn run() {
     let cli = Cli::parse();
-
-    let result = cli.command.convert(cli.value);
-
-    println!("Result: {result}");
+    
+    if let Some(value) = cli.value {
+        let result = cli.command.convert(value);
+        println!("Result: {result}");
+    } else {
+        println!("Missing value");
+        exit(1);
+    }
 }
