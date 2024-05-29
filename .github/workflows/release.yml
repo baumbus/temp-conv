@@ -17,9 +17,6 @@ jobs:
         - run: cargo build --release --all-features
         - uses: softprops/action-gh-release@v2
           with:
-            files: |
-              ./target/release/temp-conv
-              LICENSE.md
-              README.md
+            files: ./target/release/temp-conv
         
                   
