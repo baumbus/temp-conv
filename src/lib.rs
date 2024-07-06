@@ -1,53 +1,54 @@
 use std::process::exit;
 
-use clap::{Parser, Subcommand};
+use clap::{Parser, Subcommand, ValueEnum};
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Cli {
+    #[arg(value_enum)]
+    temperature_in: Temperature,
+    #[arg(value_enum)]
+    temperature_out: Temperature,
     value: Option<f64>,
-
-    #[command(subcommand)]
-    command: Commands,
 }
 
-#[derive(Subcommand, Debug)]
-enum Commands {
-    /// Celsius to Fahrenheit
-    Ctf,
-    /// Celsius to Kelvin
-    Ctk,
-    /// Fahrenheit to Celsius
-    Ftc,
-    /// Fahrenheit to Kelvin
-    Ftk,
-    // Kelvin to Celsius
-    Ktc,
-    /// Kelvin to Fahrenheit
-    Ktf,
-}
+impl Cli {
+    pub fn convert(&self) -> f64 {
+        let temp = self.value.expect("No value given");
+        if self.temperature_in == self.temperature_out {
+            return temp;
+        };
 
-impl Commands {
-    pub fn convert(&self, value: f64) -> f64 {
-        match self {
-            Self::Ctf => value * 1.8 + 32.0,
-            Self::Ctk => value + 273.15,
-            Self::Ftc => (value - 32.0) * 1.8,
-            Self::Ftk => (value - 32.0) * 1.8 + 273.15,
-            Self::Ktc => value - 273.15,
-            Self::Ktf => (value - 273.15) * 1.8 + 32.0, 
+        match self.temperature_in {
+            Temperature::Celsius => match self.temperature_out {
+                Temperature::Celsius => unreachable!(),
+                Temperature::Kelvin => temp + 273.15,
+                Temperature::Fahrenheit => temp * 1.8 + 32.0,
+            },
+            Temperature::Kelvin => match self.temperature_out {
+                Temperature::Celsius => temp - 273.15,
+                Temperature::Kelvin => unreachable!(),
+                Temperature::Fahrenheit => (temp - 273.15) * 1.8 + 32.0,
+            },
+            Temperature::Fahrenheit => match self.temperature_out {
+                Temperature::Celsius => (temp - 32.0) * 1.8,
+                Temperature::Kelvin => (temp - 32.0) * 1.8 + 273.15,
+                Temperature::Fahrenheit => unreachable!(),
+            },
         }
     }
 }
 
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum, Debug)]
+enum Temperature {
+    Celsius,
+    Kelvin,
+    Fahrenheit,
+}
+
 pub fn run() {
     let cli = Cli::parse();
-    
-    if let Some(value) = cli.value {
-        let result = cli.command.convert(value);
-        println!("Result: {result}");
-    } else {
-        println!("Missing value");
-        exit(1);
-    }
+
+    let result = cli.convert();
+    println!("Result: {result}");
 }
