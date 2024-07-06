@@ -1,6 +1,5 @@
-use std::process::exit;
 
-use clap::{Parser, Subcommand, ValueEnum};
+use clap::{Parser, ValueEnum};
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
