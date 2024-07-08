@@ -1,8 +1,11 @@
 use clap::{Parser, ValueEnum};
+use serde::{Deserialize, Serialize};
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Cli {
+    #[arg(short, long)]
+    json: bool,
     #[arg(long)]
     only_value: bool,
     #[arg(value_enum)]
@@ -15,6 +18,10 @@ struct Cli {
 }
 
 impl Cli {
+    pub fn json(&self) -> bool {
+        self.json
+    }
+
     pub fn only_value(&self) -> bool {
         self.only_value
     }
@@ -61,11 +68,36 @@ impl Cli {
     }
 }
 
-#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum, Debug)]
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum, Debug, Serialize, Deserialize)]
 enum Temperature {
     Celsius,
     Fahrenheit,
     Kelvin,
+}
+
+#[derive(Serialize, Deserialize)]
+struct Output {
+    temperature_in: Temperature,
+    temperature_out: Temperature,
+    value_in: f64,
+    value_out: f64,
+}
+
+impl Output {
+    /// Creates a new [`Output`].
+    fn new(
+        temperature_in: Temperature,
+        value_in: f64,
+        temperature_out: Temperature,
+        value_out: f64,
+    ) -> Self {
+        Self {
+            temperature_in,
+            value_in,
+            temperature_out,
+            value_out,
+        }
+    }
 }
 
 impl std::fmt::Display for Temperature {
@@ -81,15 +113,21 @@ impl std::fmt::Display for Temperature {
 pub fn run() {
     let cli = Cli::parse();
 
+    let temperature_in = cli.temperature_in();
+    let temperature_out = cli.temperature_out();
+    let original_value = cli.value();
+
     let result = cli.convert();
+
+    let output = Output::new(temperature_in, original_value, temperature_out, result);
 
     if cli.only_value() {
         println!("{result}");
     } else if cli.verbose() {
-        let temp_in = cli.temperature_in();
-        let temp_out = cli.temperature_out();
-        let original_value = cli.value();
-        println!("From {original_value} {temp_in} to {result} {temp_out}");
+        println!("From {original_value} {temperature_in} to {result} {temperature_out}");
+    } else if cli.json() {
+        let json_string = serde_json::to_string(&output).unwrap();
+        println!("{}", json_string);
     } else {
         println!("Result: {result}")
     }
