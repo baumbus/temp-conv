@@ -20,6 +20,14 @@ The binary is named `temp-conv`
 
 Running it with no arguments or `temp-conv --help` will bring up a help page.
 
+## Feature Request
+
+For feature requests just open an issue on [GitHub](https://github.com/baumbus/temp-conv)
+
+## Todos
+
+- [ ] output to file
+
 ## License
 
 Licensed under MIT license.
