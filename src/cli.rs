@@ -5,6 +5,7 @@ use clap::Parser;
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 pub struct Cli {
+    #[cfg(any(feature = "json", feature = "yaml", feature = "toml"))]
     #[arg(value_enum, short, long)]
     format: Option<crate::formatted_output::Format>,
     #[arg(long)]
@@ -21,8 +22,14 @@ pub struct Cli {
 }
 
 impl Cli {
+    #[cfg(any(feature = "json", feature = "yaml", feature = "toml"))]
     pub fn format(&self) -> Option<crate::formatted_output::Format> {
         self.format
+    }
+
+    #[cfg(not(any(feature = "json", feature = "yaml", feature = "toml")))]
+    pub fn format(&self) -> Option<crate::formatted_output::Format> {
+        None
     }
 
     pub fn only_value(&self) -> bool {

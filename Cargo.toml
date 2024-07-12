@@ -16,9 +16,15 @@ exclude = ["tests/", ".github/", "target/"]
 [dependencies]
 clap = { version = "4.5.3", features = ["derive"] }
 serde = { version = "1.0.204", features = ["derive", "serde_derive"] }
-serde_json = "1.0.120"
-serde_yaml = "0.9.34"
-toml = "0.8.14"
+serde_json = { version = "1.0.120", optional = true }
+serde_yaml = { version = "0.9.34", optional = true }
+toml = { version = "0.8.14", optional = true }
+
+[features]
+default = ["json", "yaml", "toml"]
+json = ["dep:serde_json"]
+yaml = ["dep:serde_yaml"]
+toml = ["dep:toml"]
 
 [profile.dev]
 opt-level = 0

@@ -25,14 +25,17 @@ impl Output {
         }
     }
 
+    #[cfg(feature = "json")]
     pub fn to_json(self) -> Result<String, serde_json::Error> {
         serde_json::to_string_pretty(&self)
     }
 
+    #[cfg(feature = "yaml")]
     pub fn to_yaml(self) -> Result<String, serde_yaml::Error> {
         serde_yaml::to_string(&self)
     }
 
+    #[cfg(feature = "toml")]
     pub fn to_toml(self) -> Result<String, toml::ser::Error> {
         toml::to_string_pretty(&self)
     }
@@ -40,7 +43,10 @@ impl Output {
 
 #[derive(Debug, Serialize, Deserialize, Copy, Clone, ValueEnum)]
 pub enum Format {
+    #[cfg(feature = "json")]
     Json,
+    #[cfg(feature = "yaml")]
     Yaml,
+    #[cfg(feature = "toml")]
     Toml,
 }

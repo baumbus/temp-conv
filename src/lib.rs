@@ -1,20 +1,24 @@
 use clap::Parser;
 
-mod cli;
-mod formatted_output;
-mod temperature;
+pub mod cli;
+pub mod formatted_output;
+pub mod temperature;
 
 pub fn run() {
     let cli = cli::Cli::parse();
 
+    #[cfg(any(feature = "json", feature = "yaml", feature = "toml"))]
     let temperature_in = cli.temperature_in();
+    #[cfg(any(feature = "json", feature = "yaml", feature = "toml"))]
     let temperature_out = cli.temperature_out();
+    #[cfg(any(feature = "json", feature = "yaml", feature = "toml"))]
     let original_value = cli.value();
 
     let format = cli.format();
 
     let result = cli.convert();
 
+    #[cfg(any(feature = "json", feature = "yaml", feature = "toml"))]
     let output =
         formatted_output::Output::new(temperature_in, original_value, temperature_out, result);
 
@@ -22,8 +26,11 @@ pub fn run() {
         format!("{result}")
     } else if let Some(format) = format {
         match format {
+            #[cfg(feature = "json")]
             formatted_output::Format::Json => output.to_json().unwrap(),
+            #[cfg(feature = "yaml")]
             formatted_output::Format::Yaml => output.to_yaml().unwrap(),
+            #[cfg(feature = "toml")]
             formatted_output::Format::Toml => output.to_toml().unwrap(),
         }
     } else {
