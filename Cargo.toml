@@ -17,6 +17,8 @@ exclude = ["tests/", ".github/", "target/"]
 clap = { version = "4.5.3", features = ["derive"] }
 serde = { version = "1.0.204", features = ["derive", "serde_derive"] }
 serde_json = "1.0.120"
+serde_yaml = "0.9.34"
+toml = "0.8.14"
 
 [profile.dev]
 opt-level = 0
