@@ -182,7 +182,7 @@ dependencies = [
 
 [[package]]
 name = "temp-conv"
-version = "0.3.0"
+version = "0.3.3"
 dependencies = [
  "clap",
  "serde",

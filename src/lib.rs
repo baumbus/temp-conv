@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use clap::{Parser, ValueEnum};
 use serde::{Deserialize, Serialize};
 
@@ -8,6 +10,8 @@ struct Cli {
     json: bool,
     #[arg(long)]
     only_value: bool,
+    #[arg(short, long)]
+    output: Option<PathBuf>,
     #[arg(value_enum)]
     temperature_in: Temperature,
     #[arg(value_enum)]
@@ -24,6 +28,10 @@ impl Cli {
 
     pub fn only_value(&self) -> bool {
         self.only_value
+    }
+
+    pub fn output(&self) -> Option<PathBuf> {
+        self.output.clone()
     }
 
     pub fn value(&self) -> f64 {
@@ -121,14 +129,23 @@ pub fn run() {
 
     let output = Output::new(temperature_in, original_value, temperature_out, result);
 
-    if cli.only_value() {
-        println!("{result}");
-    } else if cli.verbose() {
-        println!("From {original_value} {temperature_in} to {result} {temperature_out}");
+    let output_string = if cli.only_value() {
+        format!("{result}")
     } else if cli.json() {
-        let json_string = serde_json::to_string(&output).unwrap();
-        println!("{}", json_string);
+        let json_string = serde_json::to_string_pretty(&output).unwrap();
+        json_string.to_string()
     } else {
-        println!("Result: {result}")
+        format!("Result: {result}")
+    };
+
+    if let Some(path) = cli.output() {
+        let result = std::fs::write(path.as_path(), output_string);
+        match result {
+            Ok(_) if cli.verbose() => println!("Sucessfully saved at {}", path.display()),
+            Err(e) => eprintln!("{e}"),
+            _ => {}
+        }
+    } else {
+        println!("{}", output_string);
     }
 }
