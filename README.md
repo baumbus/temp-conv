@@ -1,5 +1,14 @@
 # temp-conv
 
+<!--toc:start-->
+- [temp-conv](#temp-conv)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Feature Request](#feature-request)
+  - [Todos](#todos)
+  - [License](#license)
+<!--toc:end-->
+
 temp-conv is a cli-tool to convert between diffirent units for temperatures.
 
 ## Installation
@@ -26,7 +35,7 @@ For feature requests just open an issue on [GitHub](https://github.com/baumbus/t
 
 ## Todos
 
-- [ ] output to file
+- [x] output to file
 
 ## License
 
