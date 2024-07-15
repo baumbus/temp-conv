@@ -1,3 +1,4 @@
+use anyhow::Result;
 use clap::ValueEnum;
 use serde::{Deserialize, Serialize};
 
@@ -26,18 +27,24 @@ impl Output {
     }
 
     #[cfg(feature = "json")]
-    pub fn to_json(self) -> Result<String, serde_json::Error> {
-        serde_json::to_string_pretty(&self)
+    pub fn to_json(self) -> Result<String> {
+        use anyhow::Context;
+
+        serde_json::to_string_pretty(&self).context("Failed to parse Output to Json-Format")
     }
 
     #[cfg(feature = "yaml")]
-    pub fn to_yaml(self) -> Result<String, serde_yaml::Error> {
-        serde_yaml::to_string(&self)
+    pub fn to_yaml(self) -> Result<String> {
+        use anyhow::Context;
+
+        serde_yaml::to_string(&self).context("Failed to parse Output to Yaml-Format")
     }
 
     #[cfg(feature = "toml")]
-    pub fn to_toml(self) -> Result<String, toml::ser::Error> {
-        toml::to_string_pretty(&self)
+    pub fn to_toml(self) -> Result<String> {
+        use anyhow::Context;
+
+        toml::to_string_pretty(&self).context("Failed to parse Output to Toml-Format")
     }
 }
 

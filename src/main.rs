@@ -1,3 +1,1 @@
-fn main() {
-    temp_conv::run();
-}
+use temp_conv::run as main;

@@ -1,5 +1,6 @@
 use std::path::PathBuf;
 
+use anyhow::Context;
 use clap::Parser;
 
 #[derive(Parser, Debug)]
@@ -56,15 +57,17 @@ impl Cli {
         self.temperature_out
     }
 
-    pub fn convert(&self) -> f64 {
+    pub fn convert(&self) -> anyhow::Result<f64> {
         use crate::temperature::Temperature;
 
-        let temp = self.value.expect("No value given");
+        let temp = self
+            .value
+            .context("Failed to convert the temperature because there was no temperature given.")?;
         if self.temperature_in == self.temperature_out {
-            return temp;
+            return Ok(temp);
         };
 
-        match self.temperature_in {
+        let temp = match self.temperature_in {
             Temperature::Celsius => match self.temperature_out {
                 Temperature::Celsius => unreachable!(),
                 Temperature::Kelvin => temp + 273.15,
@@ -80,6 +83,8 @@ impl Cli {
                 Temperature::Kelvin => (temp - 32.0) * 1.8 + 273.15,
                 Temperature::Fahrenheit => unreachable!(),
             },
-        }
+        };
+
+        Ok(temp)
     }
 }

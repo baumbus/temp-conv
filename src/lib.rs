@@ -1,10 +1,11 @@
+use anyhow::{Result};
 use clap::Parser;
 
 pub mod cli;
 pub mod formatted_output;
 pub mod temperature;
 
-pub fn run() {
+pub fn run() -> Result<()> {
     let cli = cli::Cli::parse();
 
     #[cfg(any(feature = "json", feature = "yaml", feature = "toml"))]
@@ -16,7 +17,7 @@ pub fn run() {
 
     let format = cli.format();
 
-    let result = cli.convert();
+    let result = cli.convert()?;
 
     #[cfg(any(feature = "json", feature = "yaml", feature = "toml"))]
     let output =
@@ -38,13 +39,14 @@ pub fn run() {
     };
 
     if let Some(path) = cli.output() {
-        let result = std::fs::write(path.as_path(), output_string);
-        match result {
-            Ok(_) if cli.verbose() => println!("Sucessfully saved at {}", path.display()),
-            Err(e) => eprintln!("{e}"),
-            _ => {}
+        std::fs::write(path.as_path(), output_string)?;
+
+        if cli.verbose() {
+            println!("Sucessfully saved at {}", path.display());
         }
     } else {
         println!("{}", output_string);
-    }
+    };
+
+    Ok(())
 }
