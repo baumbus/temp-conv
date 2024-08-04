@@ -1,7 +1,8 @@
-use anyhow::{Result};
+use anyhow::Result;
 use clap::Parser;
 
 pub mod cli;
+pub mod error;
 pub mod formatted_output;
 pub mod temperature;
 
