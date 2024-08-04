@@ -58,33 +58,14 @@ impl Cli {
     }
 
     pub fn convert(&self) -> anyhow::Result<f64> {
-        use crate::temperature::Temperature;
-
         let temp = self
             .value
             .context("Failed to convert the temperature because there was no temperature given.")?;
+
         if self.temperature_in == self.temperature_out {
             return Ok(temp);
         };
 
-        let temp = match self.temperature_in {
-            Temperature::Celsius => match self.temperature_out {
-                Temperature::Celsius => unreachable!(),
-                Temperature::Kelvin => temp + 273.15,
-                Temperature::Fahrenheit => temp * 1.8 + 32.0,
-            },
-            Temperature::Kelvin => match self.temperature_out {
-                Temperature::Celsius => temp - 273.15,
-                Temperature::Kelvin => unreachable!(),
-                Temperature::Fahrenheit => (temp - 273.15) * 1.8 + 32.0,
-            },
-            Temperature::Fahrenheit => match self.temperature_out {
-                Temperature::Celsius => (temp - 32.0) * 1.8,
-                Temperature::Kelvin => (temp - 32.0) * 1.8 + 273.15,
-                Temperature::Fahrenheit => unreachable!(),
-            },
-        };
-
-        Ok(temp)
+        Ok(self.temperature_in.convert(self.temperature_out, temp))
     }
 }
