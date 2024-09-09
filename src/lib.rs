@@ -22,6 +22,7 @@ pub mod temperature;
 /// # Errors
 ///
 /// This function will return an error if the conversion is resulting in an I/O error occurs.
+#[inline]
 pub fn run() -> Result<()> {
     let cli = cli::Cli::parse();
 

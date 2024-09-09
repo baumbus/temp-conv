@@ -29,7 +29,8 @@ impl Cli {
     ///
     /// If none of the features json, yaml or toml is set this function will always return None.
     #[cfg(any(feature = "json", feature = "yaml", feature = "toml"))]
-    pub fn format(&self) -> Option<crate::formatted_output::Format> {
+    #[inline]
+    pub const fn format(&self) -> Option<crate::formatted_output::Format> {
         self.format
     }
 
@@ -37,16 +38,19 @@ impl Cli {
     ///
     /// If none of the features json, yaml or toml is set this function will always return None.
     #[cfg(not(any(feature = "json", feature = "yaml", feature = "toml")))]
-    pub fn format(&self) -> Option<crate::formatted_output::Format> {
+    #[inline]
+    pub const fn format(&self) -> Option<crate::formatted_output::Format> {
         None
     }
 
     /// Returns the only value of this [`Cli`].
-    pub fn only_value(&self) -> bool {
+    #[inline]
+    pub const fn only_value(&self) -> bool {
         self.only_value
     }
 
     /// Returns the output of this [`Cli`].
+    #[inline]
     pub fn output(&self) -> Option<PathBuf> {
         self.output.clone()
     }
@@ -56,22 +60,26 @@ impl Cli {
     /// # Panics
     ///
     /// Panics if value is none.
+    #[inline]
     pub fn value(&self) -> f64 {
         self.value.expect("Value missing")
     }
 
     /// Returns the verbose of this [`Cli`].
-    pub fn verbose(&self) -> bool {
+    #[inline]
+    pub const fn verbose(&self) -> bool {
         self.verbose
     }
 
     /// Returns the temperature in of this [`Cli`].
-    pub fn temperature_in(&self) -> crate::temperature::Temperature {
+    #[inline]
+    pub const fn temperature_in(&self) -> crate::temperature::Temperature {
         self.temperature_in
     }
 
     /// Returns the temperature out of this [`Cli`].
-    pub fn temperature_out(&self) -> crate::temperature::Temperature {
+    #[inline]
+    pub const fn temperature_out(&self) -> crate::temperature::Temperature {
         self.temperature_out
     }
 
@@ -80,6 +88,7 @@ impl Cli {
     /// # Errors
     ///
     /// This function will return an error if the field value of this struct is none.
+    #[inline]
     pub fn convert(&self) -> anyhow::Result<f64> {
         let temp = self
             .value

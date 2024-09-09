@@ -14,7 +14,8 @@ pub struct Output {
 
 impl Output {
     /// Creates a new [`Output`].
-    pub fn new(
+    #[inline]
+    pub const fn new(
         temperature_in: crate::temperature::Temperature,
         value_in: f64,
         temperature_out: crate::temperature::Temperature,
@@ -29,6 +30,7 @@ impl Output {
     }
 
     #[cfg(feature = "json")]
+    #[inline]
     pub fn to_json(self) -> Result<String> {
         use anyhow::Context;
 
@@ -36,6 +38,7 @@ impl Output {
     }
 
     #[cfg(feature = "yaml")]
+    #[inline]
     pub fn to_yaml(self) -> Result<String> {
         use anyhow::Context;
 
@@ -43,6 +46,7 @@ impl Output {
     }
 
     #[cfg(feature = "toml")]
+    #[inline]
     pub fn to_toml(self) -> Result<String> {
         use anyhow::Context;
 

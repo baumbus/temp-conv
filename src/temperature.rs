@@ -36,6 +36,7 @@ impl Temperature {
     ///
     /// assert_eq!(273.15, converted_temp);
     /// ```
+    #[inline]
     pub fn convert(&self, target_temperature: Temperature, value: f64) -> f64 {
         match self {
             Temperature::Celsius => match target_temperature {
@@ -70,6 +71,7 @@ impl Temperature {
 impl FromStr for Temperature {
     type Err = crate::error::TemperatureParseError;
 
+    #[inline]
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "Kelvin" | "kelvin" | "k" => Ok(Temperature::Kelvin),
@@ -81,6 +83,7 @@ impl FromStr for Temperature {
 }
 
 impl std::fmt::Display for Temperature {
+    #[inline]
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Temperature::Celsius => write!(f, "Celsius"),
