@@ -1,3 +1,6 @@
+#![warn(clippy::missing_const_for_fn)]
+#![warn(clippy::missing_inline_in_public_items)]
+
 //! # temp-conv
 //!
 //! temp-conv is a framework for converting between different temperature units, but it has also it's own cli-tool which uses said framework.
