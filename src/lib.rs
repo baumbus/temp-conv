@@ -22,7 +22,7 @@ pub mod temperature;
 /// # Errors
 ///
 /// This function will return an error if the conversion is resulting in an I/O error occurs.
-#[inline]
+#[allow(clippy::missing_inline_in_public_items)]
 pub fn run() -> Result<()> {
     let cli = cli::Cli::parse();
 
