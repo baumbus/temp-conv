@@ -1,3 +1,7 @@
+//! # temp-conv
+//!
+//! temp-conv is a framework for converting between different temperature units, but it has also it's own cli-tool which uses said framework.
+
 use anyhow::Result;
 use clap::Parser;
 
@@ -6,6 +10,15 @@ pub mod error;
 pub mod formatted_output;
 pub mod temperature;
 
+/// Runs the main logic of this tool
+///
+/// # Panics
+///
+/// Panics if the output can not be parsed to the specified format.
+///
+/// # Errors
+///
+/// This function will return an error if the conversion is resulting in an I/O error occurs.
 pub fn run() -> Result<()> {
     let cli = cli::Cli::parse();
 

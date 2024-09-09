@@ -1,3 +1,5 @@
+//! Data Structure for handling temperatures
+
 use std::str::FromStr;
 
 use clap::ValueEnum;
@@ -5,10 +7,14 @@ use serde::{Deserialize, Serialize};
 
 use crate::error::TemperatureParseError;
 
+/// A list of different units of temperature.
 #[derive(Clone, Copy, Eq, PartialEq, PartialOrd, Ord, ValueEnum, Debug, Serialize, Deserialize)]
 pub enum Temperature {
+    /// SI Temperature Unit commonly used nearly all over the world.
     Celsius,
+    /// Temperature Unit of the Imperial System.
     Fahrenheit,
+    /// SI Temperature Unit commonly used in a scientific context.
     Kelvin,
 }
 
@@ -18,6 +24,18 @@ impl Temperature {
     const REVERSE_FAHRENHEIT_COEF: f64 = 9.0 / 5.0;
     const FAHRENHEIT_BASELINE: f64 = 32.0;
 
+    /// Converts from one temperature unit to another.
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use crate::temperature::Temperature;
+    /// let temp_unit = Temperature::Celsius;
+    /// let temp = 0.0;
+    /// let converted_temp = temp_unit.convert(Temperature::Kelvin, temp);
+    ///
+    /// assert_eq!(273.15, converted_temp);
+    /// ```
     pub fn convert(&self, target_temperature: Temperature, value: f64) -> f64 {
         match self {
             Temperature::Celsius => match target_temperature {

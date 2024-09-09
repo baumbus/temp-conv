@@ -1,3 +1,5 @@
+//! Struct and helper function for the cli tool
+
 use std::path::PathBuf;
 
 use anyhow::Context;
@@ -23,40 +25,61 @@ pub struct Cli {
 }
 
 impl Cli {
+    /// Returns the format of this [`Cli`].
+    ///
+    /// If none of the features json, yaml or toml is set this function will always return None.
     #[cfg(any(feature = "json", feature = "yaml", feature = "toml"))]
     pub fn format(&self) -> Option<crate::formatted_output::Format> {
         self.format
     }
 
+    /// Returns the format of this [`Cli`].
+    ///
+    /// If none of the features json, yaml or toml is set this function will always return None.
     #[cfg(not(any(feature = "json", feature = "yaml", feature = "toml")))]
     pub fn format(&self) -> Option<crate::formatted_output::Format> {
         None
     }
 
+    /// Returns the only value of this [`Cli`].
     pub fn only_value(&self) -> bool {
         self.only_value
     }
 
+    /// Returns the output of this [`Cli`].
     pub fn output(&self) -> Option<PathBuf> {
         self.output.clone()
     }
 
+    /// Returns the value of this [`Cli`].
+    ///
+    /// # Panics
+    ///
+    /// Panics if value is none.
     pub fn value(&self) -> f64 {
         self.value.expect("Value missing")
     }
 
+    /// Returns the verbose of this [`Cli`].
     pub fn verbose(&self) -> bool {
         self.verbose
     }
 
+    /// Returns the temperature in of this [`Cli`].
     pub fn temperature_in(&self) -> crate::temperature::Temperature {
         self.temperature_in
     }
 
+    /// Returns the temperature out of this [`Cli`].
     pub fn temperature_out(&self) -> crate::temperature::Temperature {
         self.temperature_out
     }
 
+    /// Returns the convert of this [`Cli`].
+    ///
+    /// # Errors
+    ///
+    /// This function will return an error if the field value of this struct is none.
     pub fn convert(&self) -> anyhow::Result<f64> {
         let temp = self
             .value

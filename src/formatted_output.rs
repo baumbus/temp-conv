@@ -1,3 +1,5 @@
+//! Data Structure for helping output the results of a conversion
+
 use anyhow::Result;
 use clap::ValueEnum;
 use serde::{Deserialize, Serialize};
