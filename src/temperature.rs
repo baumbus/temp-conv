@@ -29,7 +29,7 @@ impl Temperature {
     /// # Examples
     ///
     /// ```rust
-    /// use crate::temperature::Temperature;
+    /// use temp_conv::temperature::Temperature;
     /// let temp_unit = Temperature::Celsius;
     /// let temp = 0.0;
     /// let converted_temp = temp_unit.convert(Temperature::Kelvin, temp);
